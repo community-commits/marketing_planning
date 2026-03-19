@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VetPrac Workshop Planning</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #2D3E4E; --navy-deep: #1C2B36;
+  --teal: #47BEAF; --teal-dark: #2e9e90; --teal-light: #e6f7f5; --teal-faint: #f2fbfa;
+  --cream: #F8F5F0; --warm: #EDE9E2; --border: rgba(45,62,78,0.1); --border-mid: rgba(45,62,78,0.18);
+  --text: #2D3E4E; --text-mid: #5a6b78; --text-light: #8a9aa6;
+  --green: #27a86a; --green-bg: #edfaf3; --amber: #d97706; --amber-bg: #fef7ec;
+  --red: #dc3545; --red-bg: #fef2f2; --gray-bg: #f0ede8;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+
+.topbar { background: var(--navy-deep); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 200; gap: 12px; }
+.topbar-brand { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.topbar-logo { width: 26px; height: 26px; background: var(--teal); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--navy-deep); }
+.topbar-name { font-size: 13px; font-weight: 600; color: white; }
+.ws-tabs { display: flex; align-items: center; gap: 4px; flex: 1; overflow-x: auto; padding: 0 8px; }
+.ws-tabs::-webkit-scrollbar { display: none; }
+.ws-tab { display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 7px; font-size: 12px; font-weight: 500; cursor: pointer; color: rgba(255,255,255,0.45); border: 1px solid transparent; background: none; font-family: 'DM Sans', sans-serif; white-space: nowrap; transition: all 0.15s; }
+.ws-tab:hover { color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.06); }
+.ws-tab.active { background: rgba(71,190,175,0.15); color: var(--teal); border-color: rgba(71,190,175,0.3); }
+.ws-tab-close { font-size: 14px; line-height: 1; opacity: 0.5; padding: 0 2px; }
+.ws-tab-close:hover { opacity: 1; }
+.ws-add-btn { padding: 5px 10px; border-radius: 7px; font-size: 18px; line-height: 1; cursor: pointer; color: rgba(255,255,255,0.35); border: 1px dashed rgba(255,255,255,0.15); background: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; flex-shrink: 0; }
+.ws-add-btn:hover { color: var(--teal); border-color: var(--teal); }
+.mode-tabs { display: flex; background: rgba(255,255,255,0.06); border-radius: 7px; padding: 3px; gap: 2px; flex-shrink: 0; }
+.mode-tab { padding: 5px 14px; border-radius: 5px; font-size: 12px; font-weight: 500; cursor: pointer; color: rgba(255,255,255,0.45); border: none; background: none; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+.mode-tab.active { background: var(--teal); color: var(--navy-deep); font-weight: 600; }
+.btn-sm { padding: 6px 13px; border-radius: 6px; font-size: 11.5px; font-weight: 600; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+.btn-ghost { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.65); border: 1px solid rgba(255,255,255,0.1); }
+.btn-ghost:hover { background: rgba(255,255,255,0.14); }
+
+.app { display: flex; height: calc(100vh - 52px); overflow: hidden; }
+
+.sidebar { width: 210px; min-width: 210px; background: white; border-right: 1px solid var(--border); overflow-y: auto; padding: 14px 0 20px; }
+.sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); padding: 10px 16px 4px; }
+.sidebar-item { display: flex; align-items: center; gap: 8px; padding: 7px 12px; margin: 0 8px; border-radius: 7px; cursor: pointer; font-size: 12.5px; color: var(--text-mid); transition: all 0.15s; border: none; background: none; width: calc(100% - 16px); text-align: left; font-family: 'DM Sans', sans-serif; }
+.sidebar-item:hover { background: var(--cream); color: var(--text); }
+.sidebar-item.active { background: var(--teal-light); color: var(--navy); font-weight: 600; }
+.s-num { width: 18px; height: 18px; border-radius: 50%; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; background: var(--warm); color: var(--text-light); flex-shrink: 0; }
+.sidebar-item.active .s-num { background: var(--teal); color: white; }
+.sidebar-progress { padding: 14px 16px 4px; border-top: 1px solid var(--border); margin-top: 10px; }
+.prog-label { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-light); margin-bottom: 5px; }
+.prog-track { height: 4px; background: var(--warm); border-radius: 10px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--teal); border-radius: 10px; transition: width 0.4s; }
+
+.main { flex: 1; overflow-y: auto; padding: 32px 40px 60px; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+.sec-hd { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.sec-badge { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 26px; color: var(--teal); line-height: 1; min-width: 32px; padding-top: 3px; }
+.sec-hd h2 { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; color: var(--navy); line-height: 1.2; }
+.sec-hd p { font-size: 12.5px; color: var(--text-mid); margin-top: 3px; }
+.time-chip { margin-left: auto; background: var(--navy); color: var(--teal); font-size: 10.5px; font-weight: 700; padding: 5px 11px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; align-self: center; }
+
+.chip { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; margin-left: 5px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.05em; }
+.chip-c { background: #e8f4fd; color: #1555b8; }
+.chip-m { background: var(--teal-light); color: #1a6b60; }
+.chip-cr { background: #fff3e0; color: #c25000; }
+.chip-s { background: #f3e6ff; color: #6218a8; }
+
+/* QUESTION CARDS — taller by default */
+.q-grid { display: grid; gap: 12px; }
+.q-grid.two { grid-template-columns: 1fr 1fr; }
+.q-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; transition: border-color 0.2s; }
+.q-card:focus-within { border-color: var(--teal); }
+.q-lbl { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 10px; display: flex; gap: 8px; align-items: flex-start; line-height: 1.45; }
+.q-dot { width: 16px; height: 16px; min-width: 16px; background: var(--teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: white; margin-top: 2px; }
+.q-card textarea { width: 100%; border: none; background: var(--cream); border-radius: 7px; padding: 10px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); resize: vertical; min-height: 110px; outline: none; line-height: 1.6; }
+.q-card textarea.tall { min-height: 150px; }
+.q-card textarea.xtall { min-height: 200px; }
+.q-card textarea::placeholder { color: #b8bfc5; font-style: italic; }
+.q-card textarea:focus { background: #edeae4; }
+
+.info-box { background: var(--teal-faint); border: 1px solid rgba(71,190,175,0.2); border-radius: 9px; padding: 14px 18px; margin-top: 12px; font-size: 13px; color: var(--text-mid); line-height: 1.65; }
+.info-box strong { color: var(--teal-dark); }
+
+/* EMAIL SEQUENCE MAP */
+.seq-audience { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+.aud-lm   { background: #fff3e0; color: #c25000; }
+.aud-main { background: #e8f4fd; color: #1555b8; }
+.aud-wl   { background: var(--teal-light); color: #1a6b60; }
+
+.social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.social-card { background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.s-hd { padding: 9px 14px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.sc-reels { background: #fff0f5; color: #b5245e; }
+.sc-carousel { background: #eef3ff; color: #3340b0; }
+.sc-stories { background: #fff9e6; color: #c47a00; }
+.sc-copy { background: #edfaf3; color: #1a7a4a; }
+.sc-collab { background: #f5eeff; color: #6a22a8; }
+.sc-ugc { background: #e6f9f8; color: #0a7a72; }
+.social-card textarea { width: 100%; border: none; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); resize: vertical; min-height: 110px; outline: none; background: transparent; line-height: 1.6; }
+.social-card textarea::placeholder { color: #b8c0c6; font-style: italic; }
+
+.sub-div { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); display: flex; align-items: center; gap: 9px; margin: 22px 0 12px; }
+.sub-div::before, .sub-div::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.task-table { background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 8px; }
+.tt-head { display: grid; grid-template-columns: 2.4fr 1fr 1fr 110px 1fr 28px; padding: 9px 14px; background: var(--cream); border-bottom: 1px solid var(--border); font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-light); gap: 8px; }
+.tt-row { display: grid; grid-template-columns: 2.4fr 1fr 1fr 110px 1fr 28px; padding: 10px 14px; border-bottom: 1px solid var(--border); align-items: center; gap: 8px; transition: background 0.1s; }
+.tt-row:last-child { border-bottom: none; }
+.tt-row:hover { background: var(--teal-faint); }
+.tt-name { font-size: 13px; font-weight: 500; color: var(--navy); line-height: 1.3; }
+.tt-name small { display: block; font-size: 11px; color: var(--text-light); font-weight: 400; }
+.tt-row input[type="text"], .tt-row select { border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--text); background: var(--cream); outline: none; width: 100%; transition: border-color 0.15s; }
+.tt-row input:focus, .tt-row select:focus { border-color: var(--teal); background: white; }
+.tt-row input::placeholder { color: #c0c8cf; }
+.del-btn { background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 16px; line-height: 1; padding: 2px; border-radius: 4px; transition: color 0.15s; }
+.del-btn:hover { color: var(--red); }
+.add-row-btn { width: 100%; padding: 9px; border: 1px dashed var(--border-mid); border-radius: 0 0 10px 10px; background: none; color: var(--text-light); font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; transition: all 0.15s; }
+.add-row-btn:hover { background: var(--teal-faint); color: var(--teal-dark); border-color: var(--teal); }
+.status-sel { border-radius: 20px !important; font-size: 11px !important; font-weight: 700 !important; cursor: pointer; }
+
+.review-hd { background: var(--navy); border-radius: 11px; padding: 22px 26px; margin-bottom: 22px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.review-hd h2 { font-family: 'Instrument Serif', serif; font-size: 20px; font-weight: 400; color: white; }
+.review-hd p { font-size: 12.5px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+.stat-pills { display: flex; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+.stat-pill { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 9px; padding: 9px 14px; text-align: center; }
+.stat-num { font-size: 20px; font-weight: 700; color: white; line-height: 1; }
+.stat-num.g { color: var(--teal); } .stat-num.a { color: #fbbf24; } .stat-num.r { color: #f87171; }
+.stat-lbl { font-size: 10px; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 3px; }
+
+.setup-card { background: white; border: 1px solid var(--border); border-radius: 11px; padding: 24px 28px; margin-bottom: 16px; }
+.setup-card h3 { font-family: 'Instrument Serif', serif; font-size: 19px; font-weight: 400; color: var(--navy); margin-bottom: 16px; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sf label { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-light); margin-bottom: 5px; }
+.sf input, .sf textarea { width: 100%; border: 1px solid var(--border-mid); border-radius: 7px; padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--text); outline: none; transition: border-color 0.2s; background: white; }
+.sf input:focus, .sf textarea:focus { border-color: var(--teal); }
+.sf input::placeholder, .sf textarea::placeholder { color: #c0c8cf; }
+.sf textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.sf.full { grid-column: 1 / -1; }
+
+.notes-area { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); resize: vertical; min-height: 90px; outline: none; background: white; line-height: 1.6; }
+.notes-area:focus { border-color: var(--teal); }
+.notes-area::placeholder { color: #b8c0c6; font-style: italic; }
+
+.runway-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; }
+.rw-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-light); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.rw-label span { font-weight: 400; color: var(--teal-dark); font-size: 12px; }
+.rw-track { height: 7px; background: var(--warm); border-radius: 10px; overflow: hidden; }
+.rw-fill { height: 100%; background: var(--teal); border-radius: 10px; transition: width 0.5s ease; }
+.rw-phases { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: var(--text-light); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500; display: flex; align-items: center; justify-content: center; }
+.modal { background: white; border-radius: 14px; padding: 28px 32px; width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+.modal h3 { font-family: 'Instrument Serif', serif; font-size: 20px; font-weight: 400; margin-bottom: 14px; color: var(--navy); }
+.modal input { width: 100%; border: 1px solid var(--border-mid); border-radius: 8px; padding: 10px 13px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; margin-bottom: 8px; transition: border-color 0.2s; }
+.modal input:focus { border-color: var(--teal); }
+.modal-btns { display: flex; gap: 8px; margin-top: 14px; justify-content: flex-end; }
+.btn-primary { background: var(--teal); color: var(--navy-deep); padding: 9px 20px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; border: none; cursor: pointer; }
+.btn-cancel { background: var(--warm); color: var(--text-mid); padding: 9px 16px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; border: none; cursor: pointer; }
+
+@media print { .topbar, .sidebar { display: none; } .main { padding: 16px; } .app { display: block; height: auto; overflow: visible; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">VP</div>
+    <span class="topbar-name">VetPrac</span>
+  </div>
+  <div class="ws-tabs" id="ws-tabs"></div>
+  <button class="ws-add-btn" onclick="newWorkshopPrompt()" title="Add workshop">+</button>
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-plan" onclick="setMode('plan')">Planning</button>
+    <button class="mode-tab" id="tab-review" onclick="setMode('review')">Review</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <span id="save-indicator" style="font-size:11px;color:rgba(255,255,255,0.3);white-space:nowrap;">Saved</span>
+    <button class="btn-sm btn-ghost" onclick="exportData()" title="Download a backup file">Export</button>
+    <label class="btn-sm btn-ghost" style="cursor:pointer;margin:0;" title="Load a previously exported backup">Import <input type="file" accept=".json" onchange="importData(event)" style="display:none;"></label>
+  </div>
+</div>
+
+<div class="app">
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-label">Planning session</div>
+    <button class="sidebar-item active" onclick="showPanel('setup',this)"><span class="s-num">→</span>Workshop setup</button>
+    <button class="sidebar-item" onclick="showPanel('p1',this)"><span class="s-num">1</span>Why vets care</button>
+    <button class="sidebar-item" onclick="showPanel('p2',this)"><span class="s-num">2</span>Workshop highlights</button>
+    <button class="sidebar-item" onclick="showPanel('p3',this)"><span class="s-num">3</span>Audience clarity</button>
+    <button class="sidebar-item" onclick="showPanel('p4',this)"><span class="s-num">4</span>Pain points &amp; content</button>
+    <button class="sidebar-item" onclick="showPanel('p5',this)"><span class="s-num">5</span>Lead magnet ideas</button>
+    <button class="sidebar-item" onclick="showPanel('p6',this)"><span class="s-num">6</span>Social media ideas</button>
+    <button class="sidebar-item" onclick="showPanel('p7',this)"><span class="s-num">7</span>Email sequences</button>
+    <button class="sidebar-item" onclick="showPanel('p8',this)"><span class="s-num">8</span>Task assignment</button>
+    <button class="sidebar-item" onclick="showPanel('p9',this)"><span class="s-num">+</span>Extra ideas</button>
+    <div class="sidebar-progress">
+      <div class="prog-label"><span>Session progress</span><span id="prog-pct">0%</span></div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="main" id="main-area">
+
+    <!-- SETUP -->
+    <div class="panel active" id="panel-setup">
+      <div class="sec-hd">
+        <div class="sec-badge">→</div>
+        <div><h2>Workshop setup</h2><p>Fill this in at the start of every meeting. Becomes the header for all review sessions.</p></div>
+      </div>
+      <div class="setup-card">
+        <h3>Workshop details</h3>
+        <div class="setup-grid">
+          <div class="sf"><label>Workshop name</label><input type="text" data-field="name" placeholder="e.g. Perineal & Urogenital Surgery" oninput="saveField(this)"></div>
+          <div class="sf"><label>Workshop date</label><input type="text" data-field="date" placeholder="e.g. 15 Aug 2026" oninput="saveField(this)"></div>
+          <div class="sf"><label>Venue</label><input type="text" data-field="venue" placeholder="e.g. Charles Sturt University, Wagga Wagga" oninput="saveField(this)"></div>
+          <div class="sf"><label>Months to workshop</label><input type="text" data-field="runway" placeholder="e.g. 9" oninput="saveField(this); updateRunway();"></div>
+          <div class="sf"><label>Meeting date</label><input type="text" data-field="meetingdate" placeholder="Today's date" oninput="saveField(this)"></div>
+          <div class="sf"><label>Attendees in this meeting</label><input type="text" data-field="attendees" placeholder="e.g. Marketing, Clinical, Director" oninput="saveField(this)"></div>
+          <div class="sf full"><label>Have we run this workshop before? What content &amp; assets already exist?</label><textarea data-field="existing_content" placeholder="e.g. Yes — ran Oct 2024. We have: sales page copy, 3 testimonials, carousel graphics, lead magnet v1 (needs updating), email sequence in Kajabi, photos from the day. What can be refreshed vs what needs creating from scratch..." oninput="saveField(this)"></textarea></div>
+        </div>
+      </div>
+      <div class="runway-card">
+        <div class="rw-label">Marketing runway <span id="runway-status">Enter months above</span></div>
+        <div class="rw-track"><div class="rw-fill" id="rw-fill" style="width:100%"></div></div>
+        <div class="rw-phases"><span>Now</span><span>Collateral &amp; lead magnet</span><span>Awareness</span><span>Nurture</span><span>Launch</span><span>Event</span></div>
+      </div>
+    </div>
+
+    <!-- P1: Why vets care -->
+    <div class="panel" id="panel-p1">
+      <div class="sec-hd">
+        <div class="sec-badge">01</div>
+        <div><h2>Why should vets care? <span class="chip chip-c">Clinical</span></h2><p>The clinical need drives everything. Capture the real language used in this room — it's what all copy runs off.</p></div>
+        <div class="time-chip">15 min</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What's the core clinical problem this workshop solves? What are vets currently getting wrong or lacking confidence in?</div><textarea class="tall" data-field="p1_q1" placeholder="e.g. Vets are seeing these cases but lacking confidence in surgical decision-making, particularly around X. The referral pathway is the default because the in-house alternative feels too risky..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What does the vet feel when this type of case walks into their consult room? What's the fear or gap in that moment?</div><textarea class="tall" data-field="p1_q2" placeholder="e.g. The anxiety of knowing what needs to happen but feeling underprepared. Fear of a poor outcome. The awkward conversation with the client about referral costs..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What does the vet want for their patient — and for themselves professionally — after doing this workshop?</div><textarea class="tall" data-field="p1_q3" placeholder="e.g. To offer this in-house confidently, reduce unnecessary referrals, improve patient outcomes, and be someone clients trust to handle this..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>The Monday morning test — what specific thing can they do confidently on Monday that they couldn't on Friday?</div><textarea class="tall" data-field="p1_q4" placeholder="The single tangible capability gain. Be as specific as possible — 'perform X procedure' is stronger than 'feel more confident'..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What is the TOTAL real cost of attending — and what is the full ROI argument that beats it?</div><textarea class="xtall" data-field="p1_roi" placeholder="TOTAL INVESTMENT (work through real numbers)&#10;Workshop fee: $3,500+&#10;Flights (est.): $&#10;Accommodation 2 nights (est.): $&#10;2 days out of clinic — lost consults or locum cost: $&#10;Total all-in: $&#10;&#10;ROI — INDIVIDUAL VET&#10;Revenue per case handled in-house vs referred: $&#10;How many of these cases per month in a typical GP practice:&#10;Cases needed to break even on total investment:&#10;Time to breakeven at that case rate:&#10;&#10;ROI — CLINIC OWNER&#10;Annual revenue kept if X cases/month handled in-house: $&#10;Staff retention value — investing in vets keeps them longer&#10;New service the whole clinic can promote and market&#10;&#10;BUDGET OBJECTION RESPONSES&#10;'I have used my CPD budget' →&#10;'My clinic will not fund it' →&#10;'I cannot afford 2 days out of clinic' →&#10;'I can just refer these cases' →&#10;&#10;These numbers feed directly into social posts, email sequences, retargeting ads and the sales page." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Any clinical trends or industry shifts that make this topic especially relevant right now?</div><textarea class="tall" data-field="p1_q6" placeholder="e.g. Specialist waitlists blowing out to 3+ months, increasing caseloads in regional areas, clients pushing back on referral costs, new guidelines releasing..." oninput="saveField(this)"></textarea></div>
+      </div>
+    </div>
+
+    <!-- P2: Highlights -->
+    <div class="panel" id="panel-p2">
+      <div class="sec-hd">
+        <div class="sec-badge">02</div>
+        <div><h2>Workshop highlights <span class="chip chip-c">Clinical</span></h2><p>What makes this workshop worth attending? At 9 months out the full curriculum may not be locked — capture what's known and flag gaps to follow up with the facilitator separately.</p></div>
+        <div class="time-chip">10 min</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What are the skills and capabilities attendees will leave with? Focus on what they can DO, not just what they'll have covered.</div><textarea class="tall" data-field="p2_q1" placeholder="e.g. Attendees will be able to perform X, confidently assess Y cases, manage Z complications in-house. Focus on the doing — not on 'understanding' or 'awareness of'..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Format — hands-on cadaver? Live animal? Theory:practical ratio? Cohort size? What's the hands-on experience like?</div><textarea class="tall" data-field="p2_q2" placeholder="Vets buy on the practical experience. Be specific about the ratio, the type of tissue work, how many reps per person, facilitator:attendee ratio..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Facilitator credibility — why should vets trust this specific person to teach this topic?</div><textarea data-field="p2_q6" placeholder="Background, specialty, clinical experience. Why are they the right person — not just a competent person — for this specific topic?..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>CPD hours and any accreditation angle?</div><textarea data-field="p2_q3" placeholder="CPD hours, any formal accreditation, how this fits annual CPD requirements..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Venue and experience — what's worth saying about the location, facilities, networking, or social side?</div><textarea data-field="p2_q4" placeholder="e.g. Boutique cohort experience, well-equipped surgical lab, regional destination worth the trip, networking dinner, small group that builds real connections..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What's genuinely different about VetPrac's delivery vs a conference session or online course on the same topic?</div><textarea class="tall" data-field="p2_q5" placeholder="Small group, hands-on ratio, expert access, take-home resources, post-workshop community, the VetPrac model vs passive learning at a conference..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Is anyone else running a similar workshop — AVA, universities, private providers? How does VetPrac compare?</div><textarea data-field="p2_comp" placeholder="Knowing the competitive landscape makes positioning deliberate. What are others offering, at what price, in what format? What does VetPrac do better or differently?..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Promotional video — what needs to be in it? (Under 90 seconds — this is not a curriculum recap)</div><textarea class="tall" data-field="p2_video" placeholder="Hook (10 sec): the clinical problem stated plainly&#10;Who it's for: one sentence, specific&#10;Monday morning outcome: what they can do after that they can't do now&#10;Format proof: show the lab, show hands-on work — this sells it over a conference session&#10;Facilitator credibility: who they are and why they're the right person (15 sec)&#10;The ROI line: one number — e.g. 'Handle 3 of these cases in-house and the workshop pays for itself'&#10;Social proof: one testimonial quote on screen&#10;CTA: join the waitlist / register now&#10;&#10;Notes on filming, footage needed, who scripts it, when it needs to be ready:" oninput="saveField(this)"></textarea></div>
+      </div>
+    </div>
+
+    <!-- P3: Audience clarity — NEW SECTION -->
+    <div class="panel" id="panel-p3">
+      <div class="sec-hd">
+        <div class="sec-badge">03</div>
+        <div><h2>Audience clarity <span class="chip chip-s">Strategy</span></h2><p>Get precise about who this is for and who it isn't. Specific targeting makes marketing sharper — and helps vets self-select in or out before they register.</p></div>
+        <div class="time-chip">10 min</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Who is this workshop FOR? Experience level, what they should already be comfortable doing, practice type, typical caseload.</div><textarea class="xtall" data-field="p3_for" placeholder="e.g. GP vets 3–8 years out who are regularly seeing these cases but referring the majority. Should already be comfortable with basic soft tissue surgery — this builds on that foundation. Mixed practice OK." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Who is this workshop NOT for? Be honest — this protects the room quality and prevents wrong-fit registrations.</div><textarea class="xtall" data-field="p3_not_for" placeholder="e.g. New graduates not yet comfortable with routine soft tissue surgery. Vets who haven't yet performed X independently. Vets primarily seeing exotic or equine — case application won't translate..." oninput="saveField(this)"></textarea></div>
+      </div>
+    </div>
+
+    <!-- P4: Pain points -->
+    <div class="panel" id="panel-p4">
+      <div class="sec-hd">
+        <div class="sec-badge">04</div>
+        <div><h2>Pain points &amp; content angles <span class="chip chip-s">Strategy</span></h2><p>Raw material for ad copy, email subject lines, social captions, and sales page objection handling. Be specific — generic pain points produce generic copy.</p></div>
+        <div class="time-chip">10 min</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>The top 3 clinical challenges vets face with this topic right now</div><textarea class="tall" data-field="p5_q1" placeholder="e.g.&#10;1. Knowing when to refer vs treat — the decision is genuinely hard, not just a confidence issue&#10;2. Post-op complication recognition — what's normal, what's a problem&#10;3. Talking to clients about surgical risk and referral costs..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What do vets Google or ask in vet Facebook groups about this topic? What's the conversation already happening online?</div><textarea class="tall" data-field="p5_q2" placeholder="The natural language vets use — this becomes your ad copy, email subject lines, and organic hooks. What are the actual questions being asked?..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Myths or misconceptions around this topic that the workshop directly addresses?</div><textarea class="tall" data-field="p5_q3" placeholder="Myth-busting content performs well on social and in email. Identify 2–3 here — 'Everyone thinks X but actually Y' is a reliable content format..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Key objections vets will have to registering — and how we address each in copy</div><textarea class="tall" data-field="p5_q4" placeholder="e.g. Cost ('I can just refer') → frame against referral revenue lost. Time away from clinic → one weekend vs ongoing capability. 'I'm not ready' → this IS the readiness workshop..." oninput="saveField(this)"></textarea></div>
+      </div>
+    </div>
+
+    <!-- P5: Lead magnet -->
+    <div class="panel" id="panel-p5">
+      <div class="sec-hd">
+        <div class="sec-badge">05</div>
+        <div><h2>Lead magnet ideas <span class="chip chip-m">Marketing</span></h2><p>Built from the clinical need and pain points — doesn't require a confirmed curriculum. What would this specific audience genuinely download and use today?</p></div>
+        <div class="time-chip">10 min</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What would a vet in this target audience genuinely download and use right now — before they've committed to any training?</div><textarea class="tall" data-field="p4_q1" placeholder="Think about what solves a problem they have today. Decision tools, checklists, quick reference cards, case guides, protocols they can take straight into clinic..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What format works best for this topic and audience?</div><textarea data-field="p4_q2" placeholder="e.g. A surgical decision flowchart is more useful to a time-poor vet than a general overview. A quick reference card lives on the consulting room wall. A checklist gets used..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Brainstorm 3–4 lead magnet angles — don't filter yet, get them all on the table</div><textarea class="xtall" data-field="p4_q3" placeholder="e.g.&#10;1. When to refer vs treat in-house — decision flowchart&#10;2. Top 5 mistakes vets make with X and how to avoid them&#10;3. Post-op complication checklist for X procedures&#10;4. Client communication guide: talking about surgical options&#10;5. X-step pre-surgical assessment checklist..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Which angle is strongest — most likely to attract the right person at the right stage of readiness?</div><textarea class="tall" data-field="p4_q4" placeholder="Discuss — which one attracts someone who is actively dealing with these cases and feeling the gap? That's your person. Brief the copywriter on this one after the meeting..." oninput="saveField(this)"></textarea></div>
+      </div>
+      <div class="info-box" style="margin-top:12px; display:flex; align-items:center; gap:12px;">
+        <strong style="white-space:nowrap; flex-shrink:0;">Chosen lead magnet:</strong>
+        <input type="text" data-field="p4_chosen" placeholder="Final decision from this meeting" oninput="saveField(this)" style="flex:1;border:1px solid rgba(71,190,175,0.35);border-radius:6px;padding:7px 11px;font-size:13px;outline:none;background:white;font-family:'DM Sans',sans-serif;color:var(--text);">
+      </div>
+    </div>
+
+    <!-- P6: Social -->
+    <div class="panel" id="panel-p6">
+      <div class="sec-hd">
+        <div class="sec-badge">06</div>
+        <div><h2>Social media ideas <span class="chip chip-cr">Creative</span></h2><p>Brainstorm content across the full runway. Brief the creative team directly from this section.</p></div>
+        <div class="time-chip">15 min</div>
+      </div>
+      <div class="sub-div">Organic — waitlist building (9–6 months out)</div>
+      <div class="social-grid">
+        <div class="social-card"><div class="s-hd sc-reels">Reels / short video</div><textarea data-field="p6_reels" placeholder="Clinical tip clips, 'did you know', behind the scenes of lab setup, case outcome stories, 'here's what happens when you can do this in-house'..." oninput="saveField(this)"></textarea></div>
+        <div class="social-card"><div class="s-hd sc-carousel">Carousel posts</div><textarea data-field="p6_carousel" placeholder="Educational slides — '5 signs this needs surgery', step-by-step decision framework, myth vs fact, 'what we cover in 2 days'..." oninput="saveField(this)"></textarea></div>
+        <div class="social-card"><div class="s-hd sc-stories">Stories / polls</div><textarea data-field="p6_stories" placeholder="'How confident are you with X?' polls, 'Do you refer these cases?' votes, 'Would you handle this in-house?' scenarios, countdown stickers..." oninput="saveField(this)"></textarea></div>
+        <div class="social-card"><div class="s-hd sc-copy">Long-form / captions</div><textarea data-field="p6_copy" placeholder="Clinical scenario storytelling, case outcomes, 'a vet asked me this week' posts, the cost of referring when you don't need to — emotion-led, specific..." oninput="saveField(this)"></textarea></div>
+        <div class="social-card"><div class="s-hd sc-collab">Collabs / partnerships</div><textarea data-field="p6_collab" placeholder="Vet school partnership, AVA cross-post, alumni testimonial series, specialist co-content about when referral IS appropriate vs when GP vets can handle it..." oninput="saveField(this)"></textarea></div>
+        <div class="social-card"><div class="s-hd sc-ugc">Social proof / UGC</div><textarea data-field="p6_ugc" placeholder="Past attendee testimonials, workshop photos from previous run, 'where are they now' follow-up stories, live Stories on event day..." oninput="saveField(this)"></textarea></div>
+      </div>
+      <div class="sub-div">Paid social (6 weeks – 2 months out)</div>
+      <div class="q-grid two">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Target audiences — cold, warm retargeting?</div><textarea class="tall" data-field="p6_paid_aud" placeholder="Cold: vets by interest/job title, rural/regional targeting. Warm: website visitors, email list custom audience. Lookalike: built from purchaser list..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Scroll-stopping creative hook — what stops a vet mid-scroll at 7pm?</div><textarea class="tall" data-field="p6_paid_hook" placeholder="Hands-on lab close-up, a specific clinical question as text overlay, a stat about referral costs, 'what if you never had to refer this case again'..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Retargeting carousel — 4–5 panel concepts for people who've visited but not registered?</div><textarea class="tall" data-field="p6_retargeting" placeholder="Panel 1: social proof quote. Panel 2: the Monday morning outcome. Panel 3: CPD hours + format. Panel 4: venue/experience. Panel 5: urgency or scarcity..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Any specific copy lines or angles from today's discussion worth capturing for ads?</div><textarea class="tall" data-field="p6_copy_notes" placeholder="Any phrases or hooks from the conversation that are too good to lose. Write them down now..." oninput="saveField(this)"></textarea></div>
+      </div>
+    </div>
+
+    <!-- P7: Email sequences -->
+    <div class="panel" id="panel-p7">
+      <div class="sec-hd">
+        <div class="sec-badge">07</div>
+        <div><h2>Email sequences <span class="chip chip-s">Strategy</span></h2><p>Three distinct audiences — each gets a different path. Use the map below as a reference, then capture the angles and ideas for each.</p></div>
+        <div class="time-chip">10 min</div>
+      </div>
+
+      <!-- SEQUENCE MAP -->
+      <div style="background:white;border:1px solid var(--border);border-radius:11px;padding:20px 22px;margin-bottom:16px;">
+        <div style="font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:16px;">Sequence map — how each audience flows</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+
+          <div>
+            <div class="seq-audience aud-lm">Lead magnet subscribers</div>
+            <div style="border-left:2px solid #f0a060;margin-left:5px;padding-left:12px;display:flex;flex-direction:column;gap:10px;">
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">4-email LM nurture</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Standard cadence + topic-specific additions</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">2 waitlist emails</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Shortened, reused content when reg opens</div></div>
+              <div><div style="font-size:11.5px;color:var(--text-light);font-style:italic;">Does not get full waitlist sequence</div></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="seq-audience aud-main">Main list</div>
+            <div style="border-left:2px solid #60a0d0;margin-left:5px;padding-left:12px;display:flex;flex-direction:column;gap:10px;">
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Lead magnet offer email</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Single send — no follow-up. If they click → coming soon + 1 early bird email.</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Coming soon email</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">~2 weeks before waitlist opens</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Sneak peek / CPD email</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Get your budget in order, here's what's coming</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">→ Join waitlist CTA</div></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="seq-audience aud-wl">Waitlist</div>
+            <div style="border-left:2px solid var(--teal);margin-left:5px;padding-left:12px;display:flex;flex-direction:column;gap:10px;">
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Re-engagement email 1</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">~2 weeks before launch — this is coming</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Re-engagement email 2</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Sneak peek / schedule preview</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Opened re-engagement →</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">6-email launch sequence. Early bird — 14 days.</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Did not open →</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">1 early bird email only, then suppress.</div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="q-grid two">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Lead magnet nurture — any topic-specific additions to the standard 4-email cadence?</div><textarea class="tall" data-field="p7_lm_adds" placeholder="What's the most useful clinical quick-win for email 2 of this specific topic? Any case study angle unique to this audience? Anything that makes the sequence feel tailored rather than generic..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Main list lead magnet offer — what's the hook to get them to download it? (No follow-up sequence — just the offer and 1 click-triggered follow-up)</div><textarea class="tall" data-field="p7_main_lm" placeholder="'Hey, we made this for you, it's free' — what's the angle? Why would someone on the main list who hasn't opted in for this topic still want this resource?..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Coming soon + sneak peek emails (main list) — what's the hook and angle for each?</div><textarea class="tall" data-field="p7_main_angles" placeholder="Coming soon: what's the teaser — create curiosity, don't reveal everything. Sneak peek: what's worth previewing to get someone to join the waitlist? What gets a CPD budget approved?..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Waitlist re-engagement — what warms them back up before launch? They signed up months ago.</div><textarea class="tall" data-field="p7_wl_reengage" placeholder="What reminds them why they were interested? What's changed since they signed up that makes this even more relevant? The 'you asked for this, it's finally here' moment..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>6-email waitlist launch sequence — specific angles, proof points, or objection-handlers for the copywriter?</div><textarea class="tall" data-field="p7_wl_seq" placeholder="e.g. Email 1: the announcement + early bird. Email 3: hit the Monday morning outcome hard. Email 4: testimonial from a past attendee. Email 5: address the biggest objection. Email 6: last chance / last spots..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Newsletter ideas — topics coming out of today's discussion for the copywriter to use post early bird</div><textarea class="tall" data-field="p7_nl_ideas" placeholder="e.g.&#10;1. Why rural vets are referring X cases they could handle in-house&#10;2. The myth about X being 'too complex' for GP vets&#10;3. The real cost of referring: what vets lose beyond the fee&#10;4. Specialist waitlists and what it means for GP practice..." oninput="saveField(this)"></textarea></div>
+      </div>
+
+      <div class="sub-div">Key dates &amp; decisions</div>
+      <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+          <div class="sf"><label>Lead magnet live by</label><input type="text" data-field="p7_date_lm" placeholder="Target date" oninput="saveField(this)"></div>
+          <div class="sf"><label>Coming soon email sends</label><input type="text" data-field="p7_date_cs" placeholder="~2 weeks before waitlist" oninput="saveField(this)"></div>
+          <div class="sf"><label>Waitlist opens</label><input type="text" data-field="p7_date_wl" placeholder="Target date" oninput="saveField(this)"></div>
+          <div class="sf"><label>Registration opens</label><input type="text" data-field="p7_date_reg" placeholder="Target date" oninput="saveField(this)"></div>
+          <div class="sf"><label>Early bird closes</label><input type="text" data-field="p7_date_eb" placeholder="Target date" oninput="saveField(this)"></div>
+          <div class="sf"><label>Early bird price</label><input type="text" data-field="p7_eb_price" placeholder="e.g. $3,200 (save $300)" oninput="saveField(this)"></div>
+          <div class="sf"><label>Full price</label><input type="text" data-field="p7_full_price" placeholder="e.g. $3,500" oninput="saveField(this)"></div>
+          <div class="sf"><label>Sales page approved by</label><input type="text" data-field="p7_approval" placeholder="Who signs off clinical accuracy before it goes live?" oninput="saveField(this)"></div>
+          <div class="sf"><label>Kajabi tags to create</label><input type="text" data-field="p7_kajabi_tags" placeholder="List tags needed before launch" oninput="saveField(this)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P8: Tasks -->
+    <div class="panel" id="panel-p8">
+      <div class="sec-hd">
+        <div class="sec-badge">08</div>
+        <div><h2>Task assignment</h2><p>Everyone leaves with their name on something and a date attached. This is what opens every review meeting.</p></div>
+        <div class="time-chip">10 min</div>
+      </div>
+
+      <div class="sub-div">Collateral &amp; lead generation</div>
+      <div class="task-table">
+        <div class="tt-head"><span>Task</span><span>Owner</span><span>Due date</span><span>Status</span><span>Notes</span><span></span></div>
+        <div id="tasks-collateral"></div>
+        <button class="add-row-btn" onclick="addTask('collateral')">+ Add task</button>
+      </div>
+
+      <div class="sub-div">Email &amp; sequences</div>
+      <div class="task-table">
+        <div class="tt-head"><span>Task</span><span>Owner</span><span>Due date</span><span>Status</span><span>Notes</span><span></span></div>
+        <div id="tasks-email"></div>
+        <button class="add-row-btn" onclick="addTask('email')">+ Add task</button>
+      </div>
+
+      <div class="sub-div">Social media &amp; paid</div>
+      <div class="task-table">
+        <div class="tt-head"><span>Task</span><span>Owner</span><span>Due date</span><span>Status</span><span>Notes</span><span></span></div>
+        <div id="tasks-social"></div>
+        <button class="add-row-btn" onclick="addTask('social')">+ Add task</button>
+      </div>
+    </div>
+
+    <!-- P9: Extra ideas -->
+    <div class="panel" id="panel-p9">
+      <div class="sec-hd">
+        <div class="sec-badge">+</div>
+        <div><h2>Extra ideas <span class="chip chip-s">Strategy</span></h2><p>Beyond the standard playbook — pick what fits this specific workshop.</p></div>
+      </div>
+      <div class="q-grid two">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Alumni outreach — past participants who loved it. Personal email: you loved it last time, let your colleagues know it's on again.</div><textarea class="tall" data-field="p9_alumni" placeholder="Which past workshops overlap in audience? What's the personal angle — 'you attended X in 2024, this is the same calibre of training and a colleague of yours would get a lot out of it'..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>High-spend clinic outreach — individual email during early bird to known high-value clinics. 'We thought you might be interested.'</div><textarea class="tall" data-field="p9_clinics" placeholder="Which clinics are worth a personal email during early bird? What's the angle for a clinic principal vs an individual vet — team CPD, clinic capability, staff retention..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Partnership angle — vet associations, universities, or specialist groups who could amplify this?</div><textarea class="tall" data-field="p9_partnerships" placeholder="AVA state branches, vet school alumni groups, specialist colleges, relevant vet Facebook groups — who has reach into the exact audience for this topic?..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>PR / editorial angle — is there a clinical story here for a vet industry publication or newsletter?</div><textarea class="tall" data-field="p9_pr" placeholder="A perspective piece on why this skill gap matters right now, a clinical update tied to the topic, a data point about referral rates or specialist access..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Parking lot — ideas, questions, and things that came up that need following up after today</div><textarea class="tall" data-field="p9_parking" placeholder="Anything that doesn't fit elsewhere — things to research, decisions pending, questions to take back, ideas to explore for next time..." oninput="saveField(this)"></textarea></div>
+      </div>
+    </div>
+
+    <!-- REVIEW -->
+    <div class="panel" id="panel-review">
+      <div class="review-hd">
+        <div>
+          <h2 id="review-title">Review &amp; accountability</h2>
+          <p>Update statuses live in the meeting. Only amber and red items need airtime.</p>
+        </div>
+        <div class="stat-pills">
+          <div class="stat-pill"><div class="stat-num g" id="s-done">0</div><div class="stat-lbl">Done</div></div>
+          <div class="stat-pill"><div class="stat-num a" id="s-prog">0</div><div class="stat-lbl">In progress</div></div>
+          <div class="stat-pill"><div class="stat-num r" id="s-blocked">0</div><div class="stat-lbl">Blocked</div></div>
+          <div class="stat-pill"><div class="stat-num" id="s-todo">0</div><div class="stat-lbl">Not started</div></div>
+        </div>
+      </div>
+      <div id="review-content"></div>
+      <div style="margin-top:20px">
+        <div class="sub-div">Next meeting — what needs discussing</div>
+        <textarea class="notes-area" data-field="review_notes" placeholder="Red items needing unblocking, decisions required, creative feedback needed, new tasks to add..." oninput="saveField(this)"></textarea>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal" style="display:none">
+  <div class="modal">
+    <h3>New workshop</h3>
+    <input type="text" id="modal-name" placeholder="Workshop name (e.g. Perineal Surgery Aug 2026)" onkeydown="if(event.key==='Enter')createWorkshop()">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="createWorkshop()">Create</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE ──
+const SUPA_URL = 'https://xqkfyxtlnppzfwcxwdca.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhxa2Z5eHRsbnBwemZ3Y3h3ZGNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NjgzNDMsImV4cCI6MjA4OTQ0NDM0M30.iyxV6dqNAuOmO2yrMrXnp9AFz3vTZeYwTWIsKdVZxxs';
+
+async function sbFetch(path, method = 'GET', body = null) {
+  const opts = {
+    method,
+    headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(SUPA_URL + '/rest/v1/' + path, opts);
+  if (!res.ok) { const t = await res.text(); throw new Error(t); }
+  const text = await res.text();
+  return text ? JSON.parse(text) : [];
+}
+
+async function loadFromSupabase() {
+  try {
+    const rows = await sbFetch('workshops?select=id,name,data,updated_at&order=updated_at.asc');
+    if (rows.length) {
+      workshops = rows.map(r => ({ id: r.id, name: r.name, ...r.data }));
+      activeWsId = workshops[0].id;
+    } else {
+      createWorkshopData('New Workshop');
+      activeWsId = workshops[0].id;
+      await pushWorkshop(workshops[0]);
+    }
+  } catch(e) {
+    console.warn('Supabase load failed, using local:', e);
+    try { const s = localStorage.getItem('vp_ws_v4'); if (s) workshops = JSON.parse(s); } catch(_) {}
+    if (!workshops.length) { createWorkshopData('New Workshop'); activeWsId = workshops[0].id; }
+  }
+}
+
+async function pushWorkshop(ws) {
+  const { id, name, ...data } = ws;
+  try {
+    await sbFetch('workshops?id=eq.' + id, 'DELETE');
+    await sbFetch('workshops', 'POST', { id, name, data, updated_at: new Date().toISOString() });
+  } catch(e) { console.warn('Supabase save failed:', e); }
+}
+
+let saveTimer;
+async function saveState() {
+  // local backup
+  try { localStorage.setItem('vp_ws_v4', JSON.stringify(workshops)); } catch(_) {}
+  // remote
+  const ws = getWs();
+  if (ws) await pushWorkshop(ws);
+  // indicator
+  const el = document.getElementById('save-indicator');
+  if (!el) return;
+  el.textContent = 'Saving…';
+  el.style.color = 'rgba(71,190,175,0.8)';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    el.textContent = 'Saved';
+    el.style.color = 'rgba(255,255,255,0.3)';
+  }, 900);
+}
+
+// Poll for changes from other users every 8 seconds
+setInterval(async () => {
+  try {
+    const rows = await sbFetch('workshops?select=id,name,data,updated_at&order=updated_at.asc');
+    if (!rows.length) return;
+    let changed = false;
+    rows.forEach(r => {
+      const local = workshops.find(w => w.id === r.id);
+      const remoteTs = new Date(r.updated_at).getTime();
+      const localTs = local?._lastSaved || 0;
+      if (!local) {
+        workshops.push({ id: r.id, name: r.name, ...r.data });
+        changed = true;
+      } else if (remoteTs > localTs) {
+        Object.assign(local, { name: r.name, ...r.data, _lastSaved: remoteTs });
+        changed = true;
+      }
+    });
+    if (changed) { renderTabs(); loadPanelData(); renderAllTasks(); updateProgress(); }
+  } catch(_) {}
+}, 8000);
+
+const DEFAULT_TASKS = {
+  collateral: [
+    { name:'Lead magnet (PDF or guide)', sub:'Brief to copywriter → design' },
+    { name:'Lead magnet landing page', sub:'Kajabi build + copy brief' },
+    { name:'Lead magnet thank-you page', sub:'Includes workshop mention + waitlist CTA' },
+    { name:'Lead magnet email sequence', sub:'Standard 4-email nurture + topic-specific additions' },
+    { name:'Workshop sales page', sub:'Full copy + imagery + registration form' },
+    { name:'Sales page clinical approval', sub:'Confirmed clinically accurate before going live' },
+    { name:'Early bird price confirmed', sub:'Price, saving amount, and deadline locked in' },
+    { name:'Workshop added to waitlist', sub:'Waitlist landing page live in Kajabi' },
+    { name:'Promotional video', sub:'Script, filming, edit — under 90 seconds' },
+  ],
+  email: [
+    { name:'Lead magnet offer email (main list)', sub:'Single send — if they click: coming soon + 1 EB email' },
+    { name:'Coming soon email (main list)', sub:'Sends ~2 weeks before waitlist opens' },
+    { name:'Sneak peek / CPD budget email (main list)', sub:'Schedule preview, get budget approved' },
+    { name:'Waitlist re-engagement email 1', sub:'~2 weeks before launch' },
+    { name:'Waitlist re-engagement email 2', sub:'Sneak peek / schedule preview' },
+    { name:'6-email waitlist launch sequence', sub:'Early bird — 14 days. Re-engagement openers only.' },
+    { name:'Lead magnet → launch (2 emails)', sub:'Shortened sequence — reuse waitlist content' },
+    { name:'Kajabi segment — waitlist re-engagement openers', sub:'Filter before 6-email sequence sends' },
+    { name:'1 early bird email — non-openers', sub:'Single send for waitlist who did not open re-engagement' },
+  ],
+  social: [
+    { name:'Organic content calendar', sub:'9–6 months: awareness. 6–2 months: conversion.' },
+    { name:'Reels / video scripts briefed', sub:'Brief for filming' },
+    { name:'Carousel graphics (3–4 sets)', sub:'Educational angle, creative brief required' },
+    { name:'Paid social cold audience creative', sub:'Static + video variants, 2–3 headlines' },
+    { name:'Retargeting carousel (4–5 panels)', sub:'Social proof → outcome → urgency' },
+  ]
+};
+
+let workshops = [], activeWsId = null, currentMode = 'plan';
+function getWs() { return workshops.find(w => w.id === activeWsId); }
+
+function createWorkshopData(name) {
+  const ws = { id: Date.now().toString(), name, fields: {},
+    tasks: {
+      collateral: DEFAULT_TASKS.collateral.map(t => ({...t, owner:'', due:'', status:'todo', notes:''})),
+      email: DEFAULT_TASKS.email.map(t => ({...t, owner:'', due:'', status:'todo', notes:''})),
+      social: DEFAULT_TASKS.social.map(t => ({...t, owner:'', due:'', status:'todo', notes:''})),
+    }
+  };
+  workshops.push(ws); return ws;
+}
+
+function renderTabs() {
+  const c = document.getElementById('ws-tabs'); c.innerHTML = '';
+  workshops.forEach(ws => {
+    const tab = document.createElement('button');
+    tab.className = 'ws-tab' + (ws.id === activeWsId ? ' active' : '');
+    tab.innerHTML = `<span>${ws.name || 'Unnamed'}</span><span class="ws-tab-close" onclick="deleteWorkshop(event,'${ws.id}')">×</span>`;
+    tab.onclick = (e) => { if (!e.target.classList.contains('ws-tab-close')) switchWorkshop(ws.id); };
+    c.appendChild(tab);
+  });
+}
+
+function switchWorkshop(id) {
+  activeWsId = id; renderTabs(); loadPanelData(); renderAllTasks(); updateProgress();
+  if (currentMode === 'review') updateReview();
+}
+function newWorkshopPrompt() { document.getElementById('modal').style.display = 'flex'; setTimeout(() => document.getElementById('modal-name').focus(), 50); }
+function closeModal() { document.getElementById('modal').style.display = 'none'; document.getElementById('modal-name').value = ''; }
+function createWorkshop() {
+  const name = document.getElementById('modal-name').value.trim() || 'New Workshop';
+  const ws = createWorkshopData(name); closeModal(); saveState(); switchWorkshop(ws.id);
+}
+function deleteWorkshop(e, id) {
+  e.stopPropagation();
+  if (workshops.length === 1) { alert('Need at least one workshop.'); return; }
+  if (!confirm('Remove this workshop?')) return;
+  workshops = workshops.filter(w => w.id !== id);
+  if (activeWsId === id) activeWsId = workshops[0].id;
+  saveState(); renderTabs(); loadPanelData(); renderAllTasks();
+}
+
+function saveField(el) {
+  const ws = getWs(); if (!ws) return;
+  ws.fields[el.dataset.field] = el.value; saveState(); updateProgress();
+  if (el.dataset.field === 'name') renderTabs();
+}
+function loadPanelData() {
+  const ws = getWs(); if (!ws) return;
+  document.querySelectorAll('[data-field]').forEach(el => { el.value = ws.fields[el.dataset.field] || ''; });
+  updateRunway();
+}
+function updateRunway() {
+  const ws = getWs(); if (!ws) return;
+  const m = parseInt(ws.fields['runway']) || 0;
+  document.getElementById('rw-fill').style.width = Math.min(100, Math.round((m/9)*100)) + '%';
+  document.getElementById('runway-status').textContent = m ? m + ' months out' : 'Enter months above';
+}
+
+function showPanel(id, btn) {
+  if (currentMode === 'review') return;
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+  updateProgress();
+}
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('tab-plan').classList.toggle('active', mode === 'plan');
+  document.getElementById('tab-review').classList.toggle('active', mode === 'review');
+  document.getElementById('sidebar').style.display = mode === 'plan' ? 'block' : 'none';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  if (mode === 'review') { document.getElementById('panel-review').classList.add('active'); updateReview(); }
+  else { document.getElementById('panel-setup').classList.add('active'); document.querySelector('.sidebar-item').classList.add('active'); }
+}
+function updateProgress() {
+  const ws = getWs(); if (!ws) return;
+  const filled = Object.values(ws.fields).filter(v => v && v.trim()).length;
+  const pct = Math.min(100, Math.round((filled / 32) * 100));
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
+const SC = { todo:'#8a9aa6', progress:'#d97706', done:'#27a86a', blocked:'#dc3545' };
+
+function renderTaskGroup(groupId) {
+  const ws = getWs(); if (!ws) return;
+  const c = document.getElementById('tasks-' + groupId); if (!c) return;
+  c.innerHTML = '';
+  (ws.tasks[groupId] || []).forEach((task, i) => {
+    const row = document.createElement('div'); row.className = 'tt-row';
+    row.innerHTML = `
+      <div class="tt-name" contenteditable="true" onblur="updateTaskName('${groupId}',${i},this.innerText)">${task.name}<small>${task.sub||''}</small></div>
+      <input type="text" placeholder="Owner" value="${task.owner||''}" onchange="updateTask('${groupId}',${i},'owner',this.value)">
+      <input type="text" placeholder="Due date" value="${task.due||''}" onchange="updateTask('${groupId}',${i},'due',this.value)">
+      <select class="status-sel" style="color:${SC[task.status||'todo']}" onchange="updateTask('${groupId}',${i},'status',this.value);this.style.color=SC[this.value]">
+        <option value="todo" ${task.status==='todo'?'selected':''}>Not started</option>
+        <option value="progress" ${task.status==='progress'?'selected':''}>In progress</option>
+        <option value="done" ${task.status==='done'?'selected':''}>Done</option>
+        <option value="blocked" ${task.status==='blocked'?'selected':''}>Blocked</option>
+      </select>
+      <input type="text" placeholder="Notes" value="${task.notes||''}" onchange="updateTask('${groupId}',${i},'notes',this.value)">
+      <button class="del-btn" onclick="deleteTask('${groupId}',${i})">×</button>`;
+    c.appendChild(row);
+  });
+}
+function renderAllTasks() { ['collateral','email','social'].forEach(g => renderTaskGroup(g)); }
+function updateTask(groupId, i, field, value) {
+  const ws = getWs(); if (!ws) return;
+  ws.tasks[groupId][i][field] = value; saveState();
+  if (currentMode === 'review') updateReview();
+}
+function updateTaskName(groupId, i, value) {
+  const ws = getWs(); if (!ws) return;
+  ws.tasks[groupId][i].name = value.trim() || 'Task'; saveState();
+}
+function deleteTask(groupId, i) {
+  const ws = getWs(); if (!ws) return;
+  ws.tasks[groupId].splice(i, 1); saveState(); renderTaskGroup(groupId);
+}
+function addTask(groupId) {
+  const ws = getWs(); if (!ws) return;
+  ws.tasks[groupId].push({ name:'New task', sub:'', owner:'', due:'', status:'todo', notes:'' });
+  saveState(); renderTaskGroup(groupId);
+}
+
+function updateReview() {
+  const ws = getWs(); if (!ws) return;
+  document.getElementById('review-title').textContent = (ws.fields['name'] || 'Workshop') + ' — review';
+  let done=0, prog=0, blocked=0, todo=0;
+  const byPerson = {};
+  Object.keys(ws.tasks).forEach(gId => {
+    (ws.tasks[gId]||[]).forEach(task => {
+      if (task.status==='done') done++; else if (task.status==='progress') prog++;
+      else if (task.status==='blocked') blocked++; else todo++;
+      const owner = task.owner || 'Unassigned';
+      if (!byPerson[owner]) byPerson[owner] = [];
+      byPerson[owner].push({...task, gId});
+    });
+  });
+  document.getElementById('s-done').textContent = done;
+  document.getElementById('s-prog').textContent = prog;
+  document.getElementById('s-blocked').textContent = blocked;
+  document.getElementById('s-todo').textContent = todo;
+  const SL = { todo:'Not started', progress:'In progress', done:'Done', blocked:'Blocked' };
+  const SB = { todo:'background:var(--gray-bg);color:var(--text-mid)', progress:'background:var(--amber-bg);color:var(--amber)', done:'background:var(--green-bg);color:var(--green)', blocked:'background:var(--red-bg);color:var(--red)' };
+  const c = document.getElementById('review-content'); c.innerHTML = '';
+  Object.keys(byPerson).sort().forEach(person => {
+    const wrap = document.createElement('div'); wrap.style.marginBottom = '18px';
+    const div = document.createElement('div'); div.className = 'sub-div'; div.textContent = person;
+    wrap.appendChild(div);
+    const table = document.createElement('div'); table.className = 'task-table';
+    table.innerHTML = `<div class="tt-head" style="grid-template-columns:2.4fr 1fr 1fr 100px 1fr"><span>Task</span><span>Due</span><span>Status</span><span>Update</span><span>Notes</span></div>`;
+    byPerson[person].forEach(task => {
+      const s = task.status || 'todo';
+      const row = document.createElement('div'); row.className = 'tt-row';
+      row.style.gridTemplateColumns = '2.4fr 1fr 1fr 100px 1fr';
+      row.innerHTML = `
+        <div class="tt-name">${task.name}<small>${task.sub||''}</small></div>
+        <div style="font-size:12px;color:var(--text-mid)">${task.due||'—'}</div>
+        <div><span style="display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;${SB[s]}"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>${SL[s]}</span></div>
+        <select class="status-sel" style="color:${SC[s]}" onchange="updateTaskByName('${task.gId}','${task.name.replace(/'/g,"\\'")}',this.value);this.style.color=SC[this.value]">
+          <option value="todo" ${s==='todo'?'selected':''}>Not started</option>
+          <option value="progress" ${s==='progress'?'selected':''}>In progress</option>
+          <option value="done" ${s==='done'?'selected':''}>Done</option>
+          <option value="blocked" ${s==='blocked'?'selected':''}>Blocked</option>
+        </select>
+        <div style="font-size:12px;color:var(--text-mid)">${task.notes||''}</div>`;
+      table.appendChild(row);
+    });
+    wrap.appendChild(table); c.appendChild(wrap);
+  });
+  const notesEl = document.querySelector('[data-field="review_notes"]');
+  if (notesEl) notesEl.value = ws.fields['review_notes'] || '';
+}
+function updateTaskByName(groupId, name, status) {
+  const ws = getWs(); if (!ws) return;
+  const task = (ws.tasks[groupId]||[]).find(t => t.name === name);
+  if (task) { task.status = status; saveState(); updateReview(); renderAllTasks(); }
+}
+
+// ── EXPORT (keep as backup option) ──
+function exportData() {
+  const data = { version: 4, exported: new Date().toISOString(), workshops };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'VetPrac_Planning_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importData(event) {
+  const file = event.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.workshops || !Array.isArray(data.workshops)) throw new Error('Invalid');
+      if (!confirm('Replace all current workshops with imported data?')) return;
+      workshops = data.workshops;
+      activeWsId = workshops[0]?.id || null;
+      for (const ws of workshops) await pushWorkshop(ws);
+      renderTabs(); loadPanelData(); renderAllTasks(); updateProgress();
+    } catch(err) { alert('Could not read file.'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+window.addEventListener('beforeunload', e => { e.preventDefault(); e.returnValue = ''; });
+
+// ── PASSWORD ──
+function checkPassword() {
+  const input = document.getElementById('pw-input');
+  const error = document.getElementById('pw-error');
+  if (input.value === 'marketingvetprac1988') {
+    document.getElementById('pw-overlay').style.display = 'none';
+    startApp();
+  } else {
+    error.style.display = 'block';
+    input.value = '';
+    input.focus();
+  }
+}
+
+// ── INIT ──
+async function startApp() {
+  document.getElementById('save-indicator').textContent = 'Loading…';
+  document.getElementById('save-indicator').style.color = 'rgba(71,190,175,0.8)';
+  await loadFromSupabase();
+  renderTabs(); loadPanelData(); renderAllTasks(); updateProgress();
+  document.getElementById('save-indicator').textContent = 'Saved';
+  document.getElementById('save-indicator').style.color = 'rgba(255,255,255,0.3)';
+  document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+  document.getElementById('pw-input').focus();
+});
+</script>
+
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay" style="position:fixed;inset:0;background:var(--navy-deep);z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:14px;padding:40px 44px;width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="width:40px;height:40px;background:var(--teal);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--navy-deep);margin:0 auto 16px;">VP</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--navy);margin-bottom:6px;">VetPrac Planning</div>
+    <div style="font-size:13px;color:var(--text-light);margin-bottom:24px;">Enter password to continue</div>
+    <input id="pw-input" type="password" placeholder="Password" style="width:100%;border:1px solid var(--border-mid);border-radius:8px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:8px;text-align:center;letter-spacing:0.1em;">
+    <div id="pw-error" style="display:none;font-size:12.5px;color:var(--red);margin-bottom:8px;">Incorrect password — try again</div>
+    <button onclick="checkPassword()" style="width:100%;background:var(--teal);color:var(--navy-deep);border:none;border-radius:8px;padding:11px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Enter</button>
+  </div>
+</div>
+
+</body>
+</html>
