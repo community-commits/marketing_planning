@@ -189,8 +189,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
     <button class="sidebar-item" onclick="showPanel('p1',this)"><span class="s-num">1</span>Why vets care</button>
     <button class="sidebar-item" onclick="showPanel('p2',this)"><span class="s-num">2</span>Workshop highlights</button>
     <button class="sidebar-item" onclick="showPanel('p3',this)"><span class="s-num">3</span>Audience clarity</button>
-    <button class="sidebar-item" onclick="showPanel('p4',this)"><span class="s-num">4</span>Lead magnet ideas</button>
-    <button class="sidebar-item" onclick="showPanel('p5',this)"><span class="s-num">5</span>Pain points &amp; content</button>
+    <button class="sidebar-item" onclick="showPanel('p4',this)"><span class="s-num">4</span>Pain points &amp; content</button>
+    <button class="sidebar-item" onclick="showPanel('p5',this)"><span class="s-num">5</span>Lead magnet ideas</button>
     <button class="sidebar-item" onclick="showPanel('p6',this)"><span class="s-num">6</span>Social media ideas</button>
     <button class="sidebar-item" onclick="showPanel('p7',this)"><span class="s-num">7</span>Email sequences</button>
     <button class="sidebar-item" onclick="showPanel('p8',this)"><span class="s-num">8</span>Task assignment</button>
@@ -217,7 +217,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
           <div class="sf"><label>Venue</label><input type="text" data-field="venue" placeholder="e.g. Charles Sturt University, Wagga Wagga" oninput="saveField(this)"></div>
           <div class="sf"><label>Months to workshop</label><input type="text" data-field="runway" placeholder="e.g. 9" oninput="saveField(this); updateRunway();"></div>
           <div class="sf"><label>Meeting date</label><input type="text" data-field="meetingdate" placeholder="Today's date" oninput="saveField(this)"></div>
-          <div class="sf"><label>Attendees in this meeting</label><input type="text" data-field="attendees" placeholder="e.g. Nick, Margie, Janine" oninput="saveField(this)"></div>
+          <div class="sf"><label>Attendees in this meeting</label><input type="text" data-field="attendees" placeholder="e.g. Marketing, Clinical, Director" oninput="saveField(this)"></div>
           <div class="sf full"><label>Have we run this workshop before? What content &amp; assets already exist?</label><textarea data-field="existing_content" placeholder="e.g. Yes — ran Oct 2024. We have: sales page copy, 3 testimonials, carousel graphics, lead magnet v1 (needs updating), email sequence in Kajabi, photos from the day. What can be refreshed vs what needs creating from scratch..." oninput="saveField(this)"></textarea></div>
         </div>
       </div>
@@ -240,7 +240,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What does the vet feel when this type of case walks into their consult room? What's the fear or gap in that moment?</div><textarea class="tall" data-field="p1_q2" placeholder="e.g. The anxiety of knowing what needs to happen but feeling underprepared. Fear of a poor outcome. The awkward conversation with the client about referral costs..." oninput="saveField(this)"></textarea></div>
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What does the vet want for their patient — and for themselves professionally — after doing this workshop?</div><textarea class="tall" data-field="p1_q3" placeholder="e.g. To offer this in-house confidently, reduce unnecessary referrals, improve patient outcomes, and be someone clients trust to handle this..." oninput="saveField(this)"></textarea></div>
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>The Monday morning test — what specific thing can they do confidently on Monday that they couldn't on Friday?</div><textarea class="tall" data-field="p1_q4" placeholder="The single tangible capability gain. Be as specific as possible — 'perform X procedure' is stronger than 'feel more confident'..." oninput="saveField(this)"></textarea></div>
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What's the return on investment conversation? How does this workshop pay for itself — financially and professionally?</div><textarea class="tall" data-field="p1_roi" placeholder="e.g. One case handled in-house instead of referred = $X in revenue kept. Over 12 months handling Y cases = the workshop cost covered in the first month. Plus: client retention, reputation as a capable GP surgeon, team confidence..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What is the TOTAL real cost of attending — and what is the full ROI argument that beats it?</div><textarea class="xtall" data-field="p1_roi" placeholder="TOTAL INVESTMENT (work through real numbers)&#10;Workshop fee: $3,500+&#10;Flights (est.): $&#10;Accommodation 2 nights (est.): $&#10;2 days out of clinic — lost consults or locum cost: $&#10;Total all-in: $&#10;&#10;ROI — INDIVIDUAL VET&#10;Revenue per case handled in-house vs referred: $&#10;How many of these cases per month in a typical GP practice:&#10;Cases needed to break even on total investment:&#10;Time to breakeven at that case rate:&#10;&#10;ROI — CLINIC OWNER&#10;Annual revenue kept if X cases/month handled in-house: $&#10;Staff retention value — investing in vets keeps them longer&#10;New service the whole clinic can promote and market&#10;&#10;BUDGET OBJECTION RESPONSES&#10;'I have used my CPD budget' →&#10;'My clinic will not fund it' →&#10;'I cannot afford 2 days out of clinic' →&#10;'I can just refer these cases' →&#10;&#10;These numbers feed directly into social posts, email sequences, retargeting ads and the sales page." oninput="saveField(this)"></textarea></div>
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Any clinical trends or industry shifts that make this topic especially relevant right now?</div><textarea class="tall" data-field="p1_q6" placeholder="e.g. Specialist waitlists blowing out to 3+ months, increasing caseloads in regional areas, clients pushing back on referral costs, new guidelines releasing..." oninput="saveField(this)"></textarea></div>
       </div>
     </div>
@@ -255,9 +255,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
       <div class="q-grid">
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What are the skills and capabilities attendees will leave with? Focus on what they can DO, not just what they'll have covered.</div><textarea class="tall" data-field="p2_q1" placeholder="e.g. Attendees will be able to perform X, confidently assess Y cases, manage Z complications in-house. Focus on the doing — not on 'understanding' or 'awareness of'..." oninput="saveField(this)"></textarea></div>
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Format — hands-on cadaver? Live animal? Theory:practical ratio? Cohort size? What's the hands-on experience like?</div><textarea class="tall" data-field="p2_q2" placeholder="Vets buy on the practical experience. Be specific about the ratio, the type of tissue work, how many reps per person, facilitator:attendee ratio..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Facilitator credibility — why should vets trust this specific person to teach this topic?</div><textarea data-field="p2_q6" placeholder="Background, specialty, clinical experience. Why are they the right person — not just a competent person — for this specific topic?..." oninput="saveField(this)"></textarea></div>
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>CPD hours and any accreditation angle?</div><textarea data-field="p2_q3" placeholder="CPD hours, any formal accreditation, how this fits annual CPD requirements..." oninput="saveField(this)"></textarea></div>
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Venue and experience — what's worth saying about the location, facilities, networking, or social side?</div><textarea data-field="p2_q4" placeholder="e.g. Boutique cohort experience, well-equipped surgical lab, regional destination worth the trip, networking dinner, small group that builds real connections..." oninput="saveField(this)"></textarea></div>
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What's genuinely different about VetPrac's delivery vs a conference session or online course on the same topic?</div><textarea class="tall" data-field="p2_q5" placeholder="Small group, hands-on ratio, expert access, take-home resources, post-workshop community, the VetPrac model vs passive learning at a conference..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Is anyone else running a similar workshop — AVA, universities, private providers? How does VetPrac compare?</div><textarea data-field="p2_comp" placeholder="Knowing the competitive landscape makes positioning deliberate. What are others offering, at what price, in what format? What does VetPrac do better or differently?..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Promotional video — what needs to be in it? (Under 90 seconds — this is not a curriculum recap)</div><textarea class="tall" data-field="p2_video" placeholder="Hook (10 sec): the clinical problem stated plainly&#10;Who it's for: one sentence, specific&#10;Monday morning outcome: what they can do after that they can't do now&#10;Format proof: show the lab, show hands-on work — this sells it over a conference session&#10;Facilitator credibility: who they are and why they're the right person (15 sec)&#10;The ROI line: one number — e.g. 'Handle 3 of these cases in-house and the workshop pays for itself'&#10;Social proof: one testimonial quote on screen&#10;CTA: join the waitlist / register now&#10;&#10;Notes on filming, footage needed, who scripts it, when it needs to be ready:" oninput="saveField(this)"></textarea></div>
       </div>
     </div>
 
@@ -269,18 +272,31 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
         <div class="time-chip">10 min</div>
       </div>
       <div class="q-grid">
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Who is this workshop FOR? Be specific — experience level, what they should already be able to do, practice type, location, typical caseload.</div><textarea class="xtall" data-field="p3_for" placeholder="e.g. GP vets 3–8 years out who are regularly seeing these cases but referring the majority. Should already be comfortable with basic soft tissue surgery. Rural and regional particularly relevant — higher case volumes, less access to referral. Mixed practice OK." oninput="saveField(this)"></textarea></div>
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Who is this workshop NOT for? Be honest — this protects the room quality and prevents wrong-fit registrations.</div><textarea class="xtall" data-field="p3_not_for" placeholder="e.g. Vets who haven't yet done X or aren't comfortable with Y — this workshop builds on a foundation, it doesn't create one. New grads who haven't yet established basic surgical confidence. Vets who primarily see exotic or equine — case application won't translate..." oninput="saveField(this)"></textarea></div>
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What's the experience prerequisite? If they've done X procedures and feel confident doing Y, this workshop is the next step.</div><textarea class="tall" data-field="p3_prereq" placeholder="e.g. Should be comfortable performing routine soft tissue surgery independently. Has seen X cases but feels they need structured guidance on the more complex presentations. Has attempted Y but wants to build consistency and confidence..." oninput="saveField(this)"></textarea></div>
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>How do we communicate the audience fit in marketing copy without being exclusionary? What's the right framing?</div><textarea class="tall" data-field="p3_framing" placeholder="e.g. 'Designed for GP vets who are already performing basic soft tissue surgery and want to take their surgical capability to the next level' — positions it as aspirational, not gatekeeping..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Who is this workshop FOR? Experience level, what they should already be comfortable doing, practice type, typical caseload.</div><textarea class="xtall" data-field="p3_for" placeholder="e.g. GP vets 3–8 years out who are regularly seeing these cases but referring the majority. Should already be comfortable with basic soft tissue surgery — this builds on that foundation. Mixed practice OK." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Who is this workshop NOT for? Be honest — this protects the room quality and prevents wrong-fit registrations.</div><textarea class="xtall" data-field="p3_not_for" placeholder="e.g. New graduates not yet comfortable with routine soft tissue surgery. Vets who haven't yet performed X independently. Vets primarily seeing exotic or equine — case application won't translate..." oninput="saveField(this)"></textarea></div>
       </div>
     </div>
 
-    <!-- P4: Lead magnet -->
+    <!-- P4: Pain points -->
     <div class="panel" id="panel-p4">
       <div class="sec-hd">
         <div class="sec-badge">04</div>
-        <div><h2>Lead magnet ideas <span class="chip chip-m">Marketing</span></h2><p>Built from the clinical need — doesn't require a confirmed curriculum. What would this specific audience genuinely download and use today?</p></div>
+        <div><h2>Pain points &amp; content angles <span class="chip chip-s">Strategy</span></h2><p>Raw material for ad copy, email subject lines, social captions, and sales page objection handling. Be specific — generic pain points produce generic copy.</p></div>
+        <div class="time-chip">10 min</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>The top 3 clinical challenges vets face with this topic right now</div><textarea class="tall" data-field="p5_q1" placeholder="e.g.&#10;1. Knowing when to refer vs treat — the decision is genuinely hard, not just a confidence issue&#10;2. Post-op complication recognition — what's normal, what's a problem&#10;3. Talking to clients about surgical risk and referral costs..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What do vets Google or ask in vet Facebook groups about this topic? What's the conversation already happening online?</div><textarea class="tall" data-field="p5_q2" placeholder="The natural language vets use — this becomes your ad copy, email subject lines, and organic hooks. What are the actual questions being asked?..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Myths or misconceptions around this topic that the workshop directly addresses?</div><textarea class="tall" data-field="p5_q3" placeholder="Myth-busting content performs well on social and in email. Identify 2–3 here — 'Everyone thinks X but actually Y' is a reliable content format..." oninput="saveField(this)"></textarea></div>
+        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Key objections vets will have to registering — and how we address each in copy</div><textarea class="tall" data-field="p5_q4" placeholder="e.g. Cost ('I can just refer') → frame against referral revenue lost. Time away from clinic → one weekend vs ongoing capability. 'I'm not ready' → this IS the readiness workshop..." oninput="saveField(this)"></textarea></div>
+      </div>
+    </div>
+
+    <!-- P5: Lead magnet -->
+    <div class="panel" id="panel-p5">
+      <div class="sec-hd">
+        <div class="sec-badge">05</div>
+        <div><h2>Lead magnet ideas <span class="chip chip-m">Marketing</span></h2><p>Built from the clinical need and pain points — doesn't require a confirmed curriculum. What would this specific audience genuinely download and use today?</p></div>
         <div class="time-chip">10 min</div>
       </div>
       <div class="q-grid">
@@ -292,22 +308,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
       <div class="info-box" style="margin-top:12px; display:flex; align-items:center; gap:12px;">
         <strong style="white-space:nowrap; flex-shrink:0;">Chosen lead magnet:</strong>
         <input type="text" data-field="p4_chosen" placeholder="Final decision from this meeting" oninput="saveField(this)" style="flex:1;border:1px solid rgba(71,190,175,0.35);border-radius:6px;padding:7px 11px;font-size:13px;outline:none;background:white;font-family:'DM Sans',sans-serif;color:var(--text);">
-      </div>
-    </div>
-
-    <!-- P5: Pain points -->
-    <div class="panel" id="panel-p5">
-      <div class="sec-hd">
-        <div class="sec-badge">05</div>
-        <div><h2>Pain points &amp; content angles <span class="chip chip-s">Strategy</span></h2><p>Every answer here becomes a social post, email subject line, carousel topic, or ad hook. Be specific — generic pain points produce generic copy.</p></div>
-        <div class="time-chip">10 min</div>
-      </div>
-      <div class="q-grid">
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>The top 3 clinical challenges vets face with this topic right now</div><textarea class="tall" data-field="p5_q1" placeholder="e.g.&#10;1. Knowing when to refer vs treat — the decision is genuinely hard, not just a confidence issue&#10;2. Post-op complication recognition — what's normal, what's a problem&#10;3. Talking to clients about surgical risk and referral costs..." oninput="saveField(this)"></textarea></div>
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>What do vets Google or ask in vet Facebook groups about this topic? What's the conversation already happening online?</div><textarea class="tall" data-field="p5_q2" placeholder="The natural language vets use — this becomes your ad copy, email subject lines, and organic hooks. What are the actual questions being asked?..." oninput="saveField(this)"></textarea></div>
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Myths or misconceptions around this topic that the workshop directly addresses?</div><textarea class="tall" data-field="p5_q3" placeholder="Myth-busting content performs well on social and in email. Identify 2–3 here — 'Everyone thinks X but actually Y' is a reliable content format..." oninput="saveField(this)"></textarea></div>
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Key objections vets will have to registering — and how we address each in copy</div><textarea class="tall" data-field="p5_q4" placeholder="e.g. Cost ('I can just refer') → frame against referral revenue lost. Time away from clinic → one weekend vs ongoing capability. 'I'm not ready' → this IS the readiness workshop..." oninput="saveField(this)"></textarea></div>
-        <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Hero headline idea — who it's for, what they gain, why now. One sentence to test.</div><textarea data-field="p5_q5" placeholder="e.g. 'Build the surgical confidence to handle X cases in-house — in two days.'" oninput="saveField(this)"></textarea></div>
       </div>
     </div>
 
@@ -361,7 +361,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
           <div>
             <div class="seq-audience aud-main">Main list</div>
             <div style="border-left:2px solid #60a0d0;margin-left:5px;padding-left:12px;display:flex;flex-direction:column;gap:10px;">
-              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Lead magnet offer email</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Hey, this is free — no follow-up sequence. If they click, 1 follow-up email.</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Lead magnet offer email</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Single send — no follow-up. If they click → coming soon + 1 early bird email.</div></div>
               <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Coming soon email</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">~2 weeks before waitlist opens</div></div>
               <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Sneak peek / CPD email</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Get your budget in order, here's what's coming</div></div>
               <div><div style="font-size:12px;font-weight:600;color:var(--navy)">→ Join waitlist CTA</div></div>
@@ -373,7 +373,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
             <div style="border-left:2px solid var(--teal);margin-left:5px;padding-left:12px;display:flex;flex-direction:column;gap:10px;">
               <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Re-engagement email 1</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">~2 weeks before launch — this is coming</div></div>
               <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Re-engagement email 2</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Sneak peek / schedule preview</div></div>
-              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">6-email launch sequence</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">Early bird focus — over 14 days</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Opened re-engagement →</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">6-email launch sequence. Early bird — 14 days.</div></div>
+              <div><div style="font-size:12px;font-weight:600;color:var(--navy)">Did not open →</div><div style="font-size:11.5px;color:var(--text-mid);margin-top:2px;">1 early bird email only, then suppress.</div></div>
             </div>
           </div>
 
@@ -389,7 +390,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
         <div class="q-card"><div class="q-lbl"><span class="q-dot">?</span>Newsletter ideas — topics coming out of today's discussion for the copywriter to use post early bird</div><textarea class="tall" data-field="p7_nl_ideas" placeholder="e.g.&#10;1. Why rural vets are referring X cases they could handle in-house&#10;2. The myth about X being 'too complex' for GP vets&#10;3. The real cost of referring: what vets lose beyond the fee&#10;4. Specialist waitlists and what it means for GP practice..." oninput="saveField(this)"></textarea></div>
       </div>
 
-      <div class="sub-div">Key dates</div>
+      <div class="sub-div">Key dates &amp; decisions</div>
       <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:16px 18px;">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
           <div class="sf"><label>Lead magnet live by</label><input type="text" data-field="p7_date_lm" placeholder="Target date" oninput="saveField(this)"></div>
@@ -397,6 +398,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
           <div class="sf"><label>Waitlist opens</label><input type="text" data-field="p7_date_wl" placeholder="Target date" oninput="saveField(this)"></div>
           <div class="sf"><label>Registration opens</label><input type="text" data-field="p7_date_reg" placeholder="Target date" oninput="saveField(this)"></div>
           <div class="sf"><label>Early bird closes</label><input type="text" data-field="p7_date_eb" placeholder="Target date" oninput="saveField(this)"></div>
+          <div class="sf"><label>Early bird price</label><input type="text" data-field="p7_eb_price" placeholder="e.g. $3,200 (save $300)" oninput="saveField(this)"></div>
+          <div class="sf"><label>Full price</label><input type="text" data-field="p7_full_price" placeholder="e.g. $3,500" oninput="saveField(this)"></div>
+          <div class="sf"><label>Sales page approved by</label><input type="text" data-field="p7_approval" placeholder="Who signs off clinical accuracy before it goes live?" oninput="saveField(this)"></div>
           <div class="sf"><label>Kajabi tags to create</label><input type="text" data-field="p7_kajabi_tags" placeholder="List tags needed before launch" oninput="saveField(this)"></div>
         </div>
       </div>
@@ -573,16 +577,21 @@ const DEFAULT_TASKS = {
     { name:'Lead magnet thank-you page', sub:'Includes workshop mention + waitlist CTA' },
     { name:'Lead magnet email sequence', sub:'Standard 4-email nurture + topic-specific additions' },
     { name:'Workshop sales page', sub:'Full copy + imagery + registration form' },
+    { name:'Sales page clinical approval', sub:'Confirmed clinically accurate before going live' },
+    { name:'Early bird price confirmed', sub:'Price, saving amount, and deadline locked in' },
     { name:'Workshop added to waitlist', sub:'Waitlist landing page live in Kajabi' },
+    { name:'Promotional video', sub:'Script, filming, edit — under 90 seconds' },
   ],
   email: [
-    { name:'Lead magnet offer email (main list)', sub:'Single send — free resource, no follow-up sequence' },
+    { name:'Lead magnet offer email (main list)', sub:'Single send — if they click: coming soon + 1 EB email' },
     { name:'Coming soon email (main list)', sub:'Sends ~2 weeks before waitlist opens' },
     { name:'Sneak peek / CPD budget email (main list)', sub:'Schedule preview, get budget approved' },
     { name:'Waitlist re-engagement email 1', sub:'~2 weeks before launch' },
     { name:'Waitlist re-engagement email 2', sub:'Sneak peek / schedule preview' },
-    { name:'6-email waitlist launch sequence', sub:'Early bird focus — 14 days, brief copywriter' },
+    { name:'6-email waitlist launch sequence', sub:'Early bird — 14 days. Re-engagement openers only.' },
     { name:'Lead magnet → launch (2 emails)', sub:'Shortened sequence — reuse waitlist content' },
+    { name:'Kajabi segment — waitlist re-engagement openers', sub:'Filter before 6-email sequence sends' },
+    { name:'1 early bird email — non-openers', sub:'Single send for waitlist who did not open re-engagement' },
   ],
   social: [
     { name:'Organic content calendar', sub:'9–6 months: awareness. 6–2 months: conversion.' },
@@ -809,8 +818,22 @@ function importData(event) {
 
 window.addEventListener('beforeunload', e => { e.preventDefault(); e.returnValue = ''; });
 
+// ── PASSWORD ──
+function checkPassword() {
+  const input = document.getElementById('pw-input');
+  const error = document.getElementById('pw-error');
+  if (input.value === 'marketingvetprac1988') {
+    document.getElementById('pw-overlay').style.display = 'none';
+    startApp();
+  } else {
+    error.style.display = 'block';
+    input.value = '';
+    input.focus();
+  }
+}
+
 // ── INIT ──
-(async () => {
+async function startApp() {
   document.getElementById('save-indicator').textContent = 'Loading…';
   document.getElementById('save-indicator').style.color = 'rgba(71,190,175,0.8)';
   await loadFromSupabase();
@@ -818,7 +841,25 @@ window.addEventListener('beforeunload', e => { e.preventDefault(); e.returnValue
   document.getElementById('save-indicator').textContent = 'Saved';
   document.getElementById('save-indicator').style.color = 'rgba(255,255,255,0.3)';
   document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
-})();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkPassword(); });
+  document.getElementById('pw-input').focus();
+});
 </script>
+
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay" style="position:fixed;inset:0;background:var(--navy-deep);z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:14px;padding:40px 44px;width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="width:40px;height:40px;background:var(--teal);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--navy-deep);margin:0 auto 16px;">VP</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--navy);margin-bottom:6px;">VetPrac Planning</div>
+    <div style="font-size:13px;color:var(--text-light);margin-bottom:24px;">Enter password to continue</div>
+    <input id="pw-input" type="password" placeholder="Password" style="width:100%;border:1px solid var(--border-mid);border-radius:8px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;margin-bottom:8px;text-align:center;letter-spacing:0.1em;">
+    <div id="pw-error" style="display:none;font-size:12.5px;color:var(--red);margin-bottom:8px;">Incorrect password — try again</div>
+    <button onclick="checkPassword()" style="width:100%;background:var(--teal);color:var(--navy-deep);border:none;border-radius:8px;padding:11px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Enter</button>
+  </div>
+</div>
+
 </body>
 </html>
